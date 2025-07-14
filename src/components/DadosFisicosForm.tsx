@@ -40,6 +40,8 @@ export const DadosFisicosForm = () => {
     }
 
     try {
+      console.log('📝 Salvando dados físicos:', data);
+      
       // Primeiro, buscar o profile do usuário
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
@@ -48,13 +50,48 @@ export const DadosFisicosForm = () => {
         .single();
 
       if (profileError) {
+        console.error('Erro ao buscar profile:', profileError);
         throw profileError;
       }
 
-      // Salvar os dados físicos na nova tabela
-      const { error } = await supabase
+      console.log('👤 Profile encontrado:', profile);
+
+      // Calcular IMC
+      const alturaEmMetros = data.altura / 100;
+      const imc = data.pesoAtual / (alturaEmMetros * alturaEmMetros);
+      
+      // Calcular progresso percentual se há meta
+      let progressoPercentual = 0;
+      if (data.metaPeso) {
+        const diferencaTotal = data.pesoAtual - data.metaPeso;
+        if (diferencaTotal > 0) {
+          progressoPercentual = Math.max(0, Math.min(100, ((data.pesoAtual - data.metaPeso) / data.pesoAtual) * 100));
+        }
+      }
+
+      // Salvar na tabela dados_saude_usuario (que é a tabela correta)
+      const { error: saudeError } = await supabase
+        .from('dados_saude_usuario')
+        .upsert({
+          user_id: profile.id,
+          peso_atual_kg: data.pesoAtual,
+          altura_cm: data.altura,
+          circunferencia_abdominal_cm: data.circunferenciaAbdominal,
+          meta_peso_kg: data.metaPeso || data.pesoAtual, // Se não há meta, usar peso atual
+          imc: imc,
+          progresso_percentual: progressoPercentual,
+          data_atualizacao: new Date().toISOString()
+        });
+
+      if (saudeError) {
+        console.error('Erro ao salvar dados de saúde:', saudeError);
+        throw saudeError;
+      }
+
+      // TAMBÉM salvar na tabela informacoes_fisicas para compatibilidade
+      const { error: fisicasError } = await supabase
         .from('informacoes_fisicas')
-        .insert({
+        .upsert({
           user_id: profile.id,
           data_nascimento: data.dataNascimento,
           sexo: data.sexo,
@@ -64,13 +101,22 @@ export const DadosFisicosForm = () => {
           meta_peso_kg: data.metaPeso
         });
 
-      if (error) {
-        throw error;
+      if (fisicasError) {
+        console.error('Erro ao salvar informações físicas:', fisicasError);
+        // Não throw aqui, pois dados de saúde já foram salvos
       }
 
+      console.log('✅ Dados salvos com sucesso!');
+      
+      // Marcar no localStorage que dados foram recém-salvos
+      localStorage.setItem('dados_recem_salvos', 'true');
+      
       toast.success('Dados salvos com sucesso! Gráficos atualizados.');
-      // Redirecionar para a página inicial onde os benefícios visuais serão exibidos
-      navigate('/');
+      
+      // Forçar atualização do hook de dados físicos
+      console.log('🚀 Redirecionando para página inicial...');
+      navigate('/', { replace: true });
+      
     } catch (error) {
       console.error('Erro ao salvar dados:', error);
       toast.error('Erro ao salvar dados. Tente novamente.');
