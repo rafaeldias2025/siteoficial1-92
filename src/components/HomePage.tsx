@@ -11,18 +11,18 @@ import butterflyLogo from '@/assets/butterfly-logo.png';
 import mirrorReflection from '@/assets/mirror-reflection.png';
 import pilatesEquipment from '@/assets/pilates-equipment.png';
 import groupSilhouette from '@/assets/group-silhouette.png';
-
-const IconCard = ({ icon: Icon, title }: { icon: any, title: string }) => (
-  <div className="text-center">
+const IconCard = ({
+  icon: Icon,
+  title
+}: {
+  icon: any;
+  title: string;
+}) => <div className="text-center">
     <Icon className="mx-auto h-10 w-10 text-white mb-4" />
     <h3 className="font-bold text-white uppercase tracking-wider">{title}</h3>
-  </div>
-);
-
+  </div>;
 const HomePage = () => {
-
-  return (
-    <div className="min-h-screen bg-white">
+  return <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
@@ -34,19 +34,13 @@ const HomePage = () => {
             <ThemeToggle />
             <Button variant="ghost" className="text-instituto-dark">Home</Button>
             <Link to="/admin">
-              <Button 
-                variant="outline" 
-                className="border-instituto-dark text-instituto-dark hover:bg-instituto-dark hover:text-white"
-              >
+              <Button variant="outline" className="border-instituto-dark hover:bg-instituto-dark text-slate-200">
                 <Crown className="mr-2 h-4 w-4" />
                 Admin
               </Button>
             </Link>
             <Link to="/auth">
-              <Button 
-                variant="default" 
-                className="bg-instituto-orange hover:bg-instituto-orange-hover"
-              >
+              <Button variant="default" className="bg-instituto-orange hover:bg-instituto-orange-hover">
                 <User className="mr-2 h-4 w-4" />
                 Entrar
               </Button>
@@ -71,21 +65,13 @@ const HomePage = () => {
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/auth">
-                  <Button 
-                    size="lg" 
-                    className="bg-instituto-orange hover:bg-instituto-orange-hover text-white px-8 py-4 text-lg font-semibold shadow-warm"
-                  >
+                  <Button size="lg" className="bg-instituto-orange hover:bg-instituto-orange-hover text-white px-8 py-4 text-lg font-semibold shadow-warm">
                     <Crown className="mr-2 h-5 w-5" />
                     ÁREA DO CLIENTE
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  className="border-instituto-orange text-instituto-orange hover:bg-instituto-orange hover:text-white px-8 py-4 text-lg font-semibold"
-                  disabled
-                >
+                <Button size="lg" variant="outline" className="border-instituto-orange text-instituto-orange hover:bg-instituto-orange hover:text-white px-8 py-4 text-lg font-semibold" disabled>
                   <Eye className="mr-2 h-5 w-5" />
                   EM BREVE - ÁREA VISITANTE
                 </Button>
@@ -93,11 +79,7 @@ const HomePage = () => {
             </div>
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-instituto-gold/20 to-transparent rounded-full blur-3xl"></div>
-              <img 
-                src={butterflyHero} 
-                alt="Transformação" 
-                className="relative z-10 w-full max-w-lg mx-auto drop-shadow-2xl"
-              />
+              <img src={butterflyHero} alt="Transformação" className="relative z-10 w-full max-w-lg mx-auto drop-shadow-2xl" />
             </div>
           </div>
         </div>
@@ -134,11 +116,7 @@ const HomePage = () => {
             {/* Processo de Recomeço */}
             <Card className="overflow-hidden group hover:shadow-warm transition-all duration-300">
               <div className="aspect-[4/3] overflow-hidden">
-                <img 
-                  src={mirrorReflection} 
-                  alt="Processo de Recomeço" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+                <img src={mirrorReflection} alt="Processo de Recomeço" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
               </div>
               <CardContent className="p-6">
                 <h3 className="text-xl font-bold text-instituto-dark mb-3">
@@ -150,9 +128,7 @@ const HomePage = () => {
                 </p>
                 <div className="flex gap-2">
                   <Link to="/auth" className="flex-1">
-                    <Button 
-                      className="w-full bg-instituto-orange hover:bg-instituto-orange-hover"
-                    >
+                    <Button className="w-full bg-instituto-orange hover:bg-instituto-orange-hover">
                       COMEÇAR
                     </Button>
                   </Link>
@@ -163,11 +139,7 @@ const HomePage = () => {
             {/* Terapia e Autoconhecimento */}
             <Card className="overflow-hidden group hover:shadow-warm transition-all duration-300">
               <div className="aspect-[4/3] overflow-hidden">
-                <img 
-                  src={groupSilhouette} 
-                  alt="Terapia e Autoconhecimento" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+                <img src={groupSilhouette} alt="Terapia e Autoconhecimento" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
               </div>
               <CardContent className="p-6">
                 <h3 className="text-xl font-bold text-instituto-dark mb-3">
@@ -179,9 +151,7 @@ const HomePage = () => {
                 </p>
                 <div className="flex gap-2">
                   <Link to="/auth" className="flex-1">
-                    <Button 
-                      className="w-full bg-instituto-orange hover:bg-instituto-orange-hover"
-                    >
+                    <Button className="w-full bg-instituto-orange hover:bg-instituto-orange-hover">
                       COMEÇAR
                     </Button>
                   </Link>
@@ -192,11 +162,7 @@ const HomePage = () => {
             {/* Atividade Física */}
             <Card className="overflow-hidden group hover:shadow-warm transition-all duration-300">
               <div className="aspect-[4/3] overflow-hidden">
-                <img 
-                  src={pilatesEquipment} 
-                  alt="Atividade Física" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+                <img src={pilatesEquipment} alt="Atividade Física" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
               </div>
               <CardContent className="p-6">
                 <h3 className="text-xl font-bold text-instituto-dark mb-3">
@@ -208,9 +174,7 @@ const HomePage = () => {
                 </p>
                 <div className="flex gap-2">
                   <Link to="/auth" className="flex-1">
-                    <Button 
-                      className="w-full bg-instituto-orange hover:bg-instituto-orange-hover"
-                    >
+                    <Button className="w-full bg-instituto-orange hover:bg-instituto-orange-hover">
                       PARTICIPAR
                     </Button>
                   </Link>
@@ -265,11 +229,7 @@ const HomePage = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/auth">
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="bg-white text-instituto-orange border-white hover:bg-instituto-light px-8 py-4 text-lg font-semibold"
-                >
+                <Button size="lg" variant="outline" className="bg-white text-instituto-orange border-white hover:bg-instituto-light px-8 py-4 text-lg font-semibold">
                   COMECE SUA TRANSFORMAÇÃO
                   <Sparkles className="ml-2 h-5 w-5" />
                 </Button>
@@ -312,10 +272,7 @@ const HomePage = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/auth">
-              <Button 
-                size="lg" 
-                className="bg-instituto-orange hover:bg-instituto-orange-hover text-white px-12 py-4 text-xl font-bold shadow-warm"
-              >
+              <Button size="lg" className="bg-instituto-orange hover:bg-instituto-orange-hover text-white px-12 py-4 text-xl font-bold shadow-warm">
                 <Crown className="mr-2 h-5 w-5" />
                 ENTRAR NO INSTITUTO
               </Button>
@@ -338,8 +295,6 @@ const HomePage = () => {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default HomePage;
