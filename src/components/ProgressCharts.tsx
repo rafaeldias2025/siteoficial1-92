@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { supabase } from '@/integrations/supabase/client';
 
 const COLORS = {
   primary: 'hsl(var(--primary))',
@@ -38,7 +39,30 @@ const COLORS = {
 };
 
 export const ProgressCharts = () => {
-  const { dadosSaude, loading } = useDadosSaude();
+  const { dadosSaude, loading, refetch } = useDadosSaude();
+
+  // Configurar listener em tempo real para atualizações dos dados de saúde
+  useEffect(() => {
+    const channel = supabase
+      .channel('dados-saude-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'dados_saude_usuario'
+        },
+        (payload) => {
+          console.log('Dados de saúde atualizados:', payload);
+          refetch(); // Atualiza os dados quando houver mudanças
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refetch]);
 
   if (loading) {
     return (
