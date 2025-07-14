@@ -42,7 +42,7 @@ const initialFormState = {
     objetivos_proxima_semana: ""
 };
 
-export default function AvaliacaoSemanal() {
+function AvaliacaoSemanal() {
     const [currentWeek, setCurrentWeek] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
     const [formData, setFormData] = useState<any>(initialFormState);
     const [isLoading, setIsLoading] = useState(false);
@@ -171,3 +171,5 @@ export default function AvaliacaoSemanal() {
         </div>
     );
 }
+
+export default AvaliacaoSemanal;
