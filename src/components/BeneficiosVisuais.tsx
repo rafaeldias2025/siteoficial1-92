@@ -84,15 +84,11 @@ export const BeneficiosVisuais: React.FC = () => {
         {/* Header Section */}
         <div className="text-center space-y-4 animate-fade-in">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground">
-            Sua Evolução em Tempo Real
+            🏆 Sua Evolução
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Acompanhe seu progresso baseado nos seus dados reais recém-cadastrados
+            Visualize sua jornada de saúde e evolução pessoal
           </p>
-          <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full">
-            <span className="animate-pulse">🟢</span>
-            <span className="font-semibold">Dados atualizados agora</span>
-          </div>
         </div>
 
         {/* Dados de Saúde */}

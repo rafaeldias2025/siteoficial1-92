@@ -40,7 +40,7 @@ const topRankingUsers = [
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
-  const [activeSection, setActiveSection] = useState('dados-fisicos');
+  const [activeSection, setActiveSection] = useState('inicio');
   const [rankingTimeFilter, setRankingTimeFilter] = useState<'week' | 'month' | 'all'>('week');
 
   const menuItems = [
@@ -51,8 +51,7 @@ const Dashboard = () => {
     { id: 'metas', label: 'Minhas Metas', icon: Target },
     { id: 'desafios', label: 'Desafios', icon: Award },
     { id: 'diario', label: 'Diário de Saúde', icon: FileText },
-    { id: 'evolucao', label: 'Sua Evolução em Tempo Real', icon: Scale },
-    { id: 'progresso', label: 'Meu Progresso', icon: BarChart3 },
+    { id: 'meu-progresso', label: 'Meu Progresso', icon: BarChart3 },
   ];
 
   const renderContent = () => {
@@ -83,10 +82,13 @@ const Dashboard = () => {
         return <Desafios />;
       case 'diario':
         return <DiarioSaude />;
-      case 'evolucao':
-        return <BeneficiosVisuais />;
-      case 'progresso':
-        return <ProgressCharts />;
+      case 'meu-progresso':
+        return (
+          <div className="space-y-8">
+            <BeneficiosVisuais />
+            <ProgressCharts />
+          </div>
+        );
       default:
         return <DadosFisicosForm />;
     }
