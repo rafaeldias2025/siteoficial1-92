@@ -29,7 +29,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
 }) => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(!!trigger);
   const [loading, setLoading] = useState(false);
   
   const [formData, setFormData] = useState({

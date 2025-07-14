@@ -1,22 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { 
-  Play, 
-  Heart, 
-  MessageCircle, 
-  CheckCircle2, 
-  Clock, 
-  Calendar, 
-  Video,
-  Star,
-  Send,
-  FileText,
-  Lightbulb
-} from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { PlayCircle, FileText, Image, CheckCircle, Clock, MessageSquare, Loader, Video, Calendar, Star, Heart, Play, Send, Lightbulb } from 'lucide-react';
 
 interface SessionResponse {
   sessionId: string;
@@ -313,7 +304,7 @@ export const ClientSessions: React.FC = () => {
                       variant="outline"
                       className="border-netflix-border text-netflix-text hover:bg-netflix-gray"
                     >
-                      <MessageCircle className="h-4 w-4" />
+                      <MessageSquare className="h-4 w-4" />
                     </Button>
                   )}
                 </div>
@@ -412,7 +403,7 @@ export const ClientSessions: React.FC = () => {
                     className="instituto-button flex-1"
                     disabled={!currentResponse.trim()}
                   >
-                    <CheckCircle2 className="h-4 w-4 mr-2" />
+                    <CheckCircle className="h-4 w-4 mr-2" />
                     Marcar como Concluída
                   </Button>
                 </div>

@@ -14,7 +14,10 @@ import MissaoDia from "@/components/MissaoDia";
 import { BeneficiosVisuais } from "@/components/BeneficiosVisuais";
 import { ProgressCharts } from "@/components/ProgressCharts";
 import { useGoals } from "@/hooks/useGoals";
-import { UserProfileHeader } from "@/components/UserProfileHeader";
+import { CompactUserHeader } from "@/components/CompactUserHeader";
+import { UserProfileMenu } from "@/components/UserProfileMenu";
+import { ClientSessions } from "@/components/sessions/ClientSessions";
+import { RequiredDataModal } from "@/components/RequiredDataModal";
 
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -46,6 +49,7 @@ const Dashboard = () => {
 
   const menuItems = [
     { id: 'inicio', label: 'Início', icon: Home },
+    { id: 'sessoes', label: 'Sessões', icon: FileText },
     { id: 'ranking', label: 'Ranking', icon: Trophy },
     { id: 'avaliacao-semanal', label: 'Avaliação Semanal', icon: Calendar },
     { id: 'metas', label: 'Minhas Metas', icon: Target },
@@ -58,6 +62,8 @@ const Dashboard = () => {
     switch (activeSection) {
       case 'inicio':
         return <MissaoDia isVisitor={false} />;
+      case 'sessoes':
+        return <ClientSessions />;
       case 'ranking':
         return (
           <div className="space-y-6">
@@ -137,14 +143,7 @@ const Dashboard = () => {
                 {menuItems.find(item => item.id === activeSection)?.label || 'Dashboard'}
               </h1>
               <div className="flex items-center gap-4">
-                <Button
-                  variant="outline"
-                  onClick={signOut}
-                  className="inline-flex items-center gap-2"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Sair
-                </Button>
+                <UserProfileMenu />
                 <ThemeToggle />
               </div>
             </div>
@@ -152,12 +151,15 @@ const Dashboard = () => {
 
           {/* Content */}
           <div className="p-6 space-y-6">
-            {/* Header com dados do usuário */}
-            <UserProfileHeader />
+            {/* Header compacto com dados do usuário */}
+            <CompactUserHeader />
             {renderContent()}
           </div>
         </div>
       </div>
+      
+      {/* Modal para dados obrigatórios */}
+      <RequiredDataModal />
     </div>
   );
 };
