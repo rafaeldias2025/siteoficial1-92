@@ -12,6 +12,7 @@ import Desafios from "@/components/Desafios";
 import DiarioSaude from "@/components/DiarioSaude";
 import MissaoDia from "@/components/MissaoDia";
 import { BeneficiosVisuais } from "@/components/BeneficiosVisuais";
+import { ProgressCharts } from "@/components/ProgressCharts";
 import { useGoals } from "@/hooks/useGoals";
 
 import { useAuth } from "@/hooks/useAuth";
@@ -85,33 +86,7 @@ const Dashboard = () => {
       case 'evolucao':
         return <BeneficiosVisuais />;
       case 'progresso':
-        return (
-          <Card className="bg-netflix-card border-netflix-border">
-            <CardContent className="p-6 text-center">
-              <h3 className="text-2xl font-bold text-netflix-text mb-4">Seu Progresso</h3>
-              <p className="text-netflix-text-muted">
-                Acompanhe sua evolução e conquistas na jornada de transformação
-              </p>
-              <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 bg-instituto-orange/10 rounded-lg">
-                  <Trophy className="h-8 w-8 text-instituto-orange mx-auto mb-2" />
-                  <p className="text-lg font-bold text-netflix-text">0</p>
-                  <p className="text-sm text-netflix-text-muted">Pontos Totais</p>
-                </div>
-                <div className="p-4 bg-instituto-green/10 rounded-lg">
-                  <Award className="h-8 w-8 text-instituto-green mx-auto mb-2" />
-                  <p className="text-lg font-bold text-netflix-text">0</p>
-                  <p className="text-sm text-netflix-text-muted">Conquistas</p>
-                </div>
-                <div className="p-4 bg-instituto-purple/10 rounded-lg">
-                  <Target className="h-8 w-8 text-instituto-purple mx-auto mb-2" />
-                  <p className="text-lg font-bold text-netflix-text">0</p>
-                  <p className="text-sm text-netflix-text-muted">Metas Ativas</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        );
+        return <ProgressCharts />;
       default:
         return <DadosFisicosForm />;
     }
