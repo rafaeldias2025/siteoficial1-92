@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +17,6 @@ interface DadosFisicosFormData {
   pesoAtual: number;
   altura: number;
   circunferenciaAbdominal: number;
-  metaPeso?: number;
 }
 
 export const DadosFisicosForm = () => {
@@ -64,7 +64,7 @@ export const DadosFisicosForm = () => {
           peso_atual_kg: Number(data.pesoAtual),
           altura_cm: Number(data.altura),
           circunferencia_abdominal_cm: Number(data.circunferenciaAbdominal),
-          meta_peso_kg: data.metaPeso ? Number(data.metaPeso) : Number(data.pesoAtual)
+          meta_peso_kg: Number(data.pesoAtual) // Usar peso atual como meta inicial
           // IMC, progresso_percentual e data_atualizacao são calculados automaticamente
         });
 
@@ -85,7 +85,7 @@ export const DadosFisicosForm = () => {
           peso_atual_kg: Number(data.pesoAtual),
           altura_cm: Number(data.altura),
           circunferencia_abdominal_cm: Number(data.circunferenciaAbdominal),
-          meta_peso_kg: data.metaPeso ? Number(data.metaPeso) : null
+          meta_peso_kg: null // Sem meta de peso definida
         });
 
       if (fisicasError) {
@@ -225,27 +225,6 @@ export const DadosFisicosForm = () => {
                 </p>
                 {errors.circunferenciaAbdominal && (
                   <p className="text-sm text-destructive">{errors.circunferenciaAbdominal.message}</p>
-                )}
-              </div>
-
-              {/* Meta de Peso (Opcional) */}
-              <div className="space-y-2">
-                <Label htmlFor="metaPeso">🎯 Meta de Peso (kg) - Opcional</Label>
-                <Input
-                  id="metaPeso"
-                  type="number"
-                  step="0.1"
-                  placeholder="65.0"
-                  {...register('metaPeso', {
-                    min: { value: 30, message: 'Meta deve ser maior que 30kg' },
-                    max: { value: 300, message: 'Meta deve ser menor que 300kg' }
-                  })}
-                />
-                <p className="text-sm text-muted-foreground">
-                  Defina seu peso ideal para acompanharmos seu progresso.
-                </p>
-                {errors.metaPeso && (
-                  <p className="text-sm text-destructive">{errors.metaPeso.message}</p>
                 )}
               </div>
 
