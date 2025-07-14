@@ -56,37 +56,24 @@ export const DadosFisicosForm = () => {
 
       console.log('👤 Profile encontrado:', profile);
 
-      // Calcular IMC
-      const alturaEmMetros = data.altura / 100;
-      const imc = data.pesoAtual / (alturaEmMetros * alturaEmMetros);
-      
-      // Calcular progresso percentual se há meta
-      let progressoPercentual = 0;
-      if (data.metaPeso) {
-        const diferencaTotal = data.pesoAtual - data.metaPeso;
-        if (diferencaTotal > 0) {
-          progressoPercentual = Math.max(0, Math.min(100, ((data.pesoAtual - data.metaPeso) / data.pesoAtual) * 100));
-        }
-      }
-
-      // Salvar na tabela dados_saude_usuario (que é a tabela correta)
+      // Salvar na tabela dados_saude_usuario (SEM campos calculados)
       const { error: saudeError } = await supabase
         .from('dados_saude_usuario')
         .upsert({
           user_id: profile.id,
-          peso_atual_kg: data.pesoAtual,
-          altura_cm: data.altura,
-          circunferencia_abdominal_cm: data.circunferenciaAbdominal,
-          meta_peso_kg: data.metaPeso || data.pesoAtual, // Se não há meta, usar peso atual
-          imc: imc,
-          progresso_percentual: progressoPercentual,
-          data_atualizacao: new Date().toISOString()
+          peso_atual_kg: Number(data.pesoAtual),
+          altura_cm: Number(data.altura),
+          circunferencia_abdominal_cm: Number(data.circunferenciaAbdominal),
+          meta_peso_kg: data.metaPeso ? Number(data.metaPeso) : Number(data.pesoAtual)
+          // IMC, progresso_percentual e data_atualizacao são calculados automaticamente
         });
 
       if (saudeError) {
         console.error('Erro ao salvar dados de saúde:', saudeError);
         throw saudeError;
       }
+
+      console.log('✅ Dados de saúde salvos com sucesso!');
 
       // TAMBÉM salvar na tabela informacoes_fisicas para compatibilidade
       const { error: fisicasError } = await supabase
@@ -95,10 +82,10 @@ export const DadosFisicosForm = () => {
           user_id: profile.id,
           data_nascimento: data.dataNascimento,
           sexo: data.sexo,
-          peso_atual_kg: data.pesoAtual,
-          altura_cm: data.altura,
-          circunferencia_abdominal_cm: data.circunferenciaAbdominal,
-          meta_peso_kg: data.metaPeso
+          peso_atual_kg: Number(data.pesoAtual),
+          altura_cm: Number(data.altura),
+          circunferencia_abdominal_cm: Number(data.circunferenciaAbdominal),
+          meta_peso_kg: data.metaPeso ? Number(data.metaPeso) : null
         });
 
       if (fisicasError) {
