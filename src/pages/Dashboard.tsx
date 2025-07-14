@@ -11,6 +11,7 @@ import MinhasMetas from "@/components/MinhasMetas";
 import Desafios from "@/components/Desafios";
 import DiarioSaude from "@/components/DiarioSaude";
 import MissaoDia from "@/components/MissaoDia";
+import { BeneficiosVisuais } from "@/components/BeneficiosVisuais";
 import { useGoals } from "@/hooks/useGoals";
 
 import { useAuth } from "@/hooks/useAuth";
@@ -49,6 +50,7 @@ const Dashboard = () => {
     { id: 'metas', label: 'Minhas Metas', icon: Target },
     { id: 'desafios', label: 'Desafios', icon: Award },
     { id: 'diario', label: 'Diário de Saúde', icon: FileText },
+    { id: 'evolucao', label: 'Sua Evolução em Tempo Real', icon: Scale },
     { id: 'progresso', label: 'Meu Progresso', icon: BarChart3 },
   ];
 
@@ -80,6 +82,8 @@ const Dashboard = () => {
         return <Desafios />;
       case 'diario':
         return <DiarioSaude />;
+      case 'evolucao':
+        return <BeneficiosVisuais />;
       case 'progresso':
         return (
           <Card className="bg-netflix-card border-netflix-border">
