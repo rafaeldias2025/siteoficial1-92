@@ -82,19 +82,23 @@ export const BeneficiosVisuais: React.FC = () => {
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header Section */}
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-4 animate-fade-in">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground">
             Sua Evolução em Tempo Real
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Acompanhe seu progresso baseado nos seus dados reais
+            Acompanhe seu progresso baseado nos seus dados reais recém-cadastrados
           </p>
+          <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full">
+            <span className="animate-pulse">🟢</span>
+            <span className="font-semibold">Dados atualizados agora</span>
+          </div>
         </div>
 
         {/* Dados de Saúde */}
         {dadosSaude ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="hover:shadow-lg transition-shadow">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-scale-in">
+            <Card className="hover:shadow-lg transition-shadow border-2 border-instituto-orange/20 hover:border-instituto-orange/50">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-instituto-orange">
                   <Activity className="h-5 w-5" />
@@ -102,14 +106,19 @@ export const BeneficiosVisuais: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold mb-2">{dadosSaude.imc?.toFixed(1)}</div>
-                <div className={`text-sm ${getIMCStatus(dadosSaude.imc || 0).cor}`}>
+                <div className="text-3xl font-bold mb-2 text-instituto-orange">
+                  {dadosSaude.imc?.toFixed(1)}
+                </div>
+                <div className={`text-sm font-semibold ${getIMCStatus(dadosSaude.imc || 0).cor}`}>
                   {getIMCStatus(dadosSaude.imc || 0).status}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  Calculado com seus dados: {dadosSaude.peso_atual_kg}kg / {(dadosSaude.altura_cm!/100).toFixed(2)}m
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-shadow">
+            <Card className="hover:shadow-lg transition-shadow border-2 border-instituto-orange/20 hover:border-instituto-orange/50">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-instituto-orange">
                   <Target className="h-5 w-5" />
@@ -117,25 +126,41 @@ export const BeneficiosVisuais: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold mb-2">{dadosSaude.progresso_percentual?.toFixed(0)}%</div>
-                <Progress value={dadosSaude.progresso_percentual || 0} className="h-2" />
-                <div className="text-sm text-muted-foreground mt-2">
-                  Meta: {dadosSaude.meta_peso_kg}kg
+                <div className="text-3xl font-bold mb-2 text-instituto-orange">
+                  {dadosSaude.progresso_percentual?.toFixed(0) || '0'}%
+                </div>
+                <Progress 
+                  value={dadosSaude.progresso_percentual || 0} 
+                  className="h-3 mb-2" 
+                />
+                <div className="text-sm text-muted-foreground">
+                  Meta: {dadosSaude.meta_peso_kg || 'Não definida'}kg
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {dadosSaude.meta_peso_kg ? 
+                    `Faltam ${Math.abs((dadosSaude.meta_peso_kg - dadosSaude.peso_atual_kg!)).toFixed(1)}kg` :
+                    'Defina uma meta para ver seu progresso'
+                  }
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-shadow">
+            <Card className="hover:shadow-lg transition-shadow border-2 border-instituto-orange/20 hover:border-instituto-orange/50">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-instituto-orange">
                   <Ruler className="h-5 w-5" />
-                  Circunferência
+                  Circunferência Abdominal
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold mb-2">{dadosSaude.circunferencia_abdominal_cm}cm</div>
-                <div className="text-sm text-green-600">
-                  Redução de 3,4 cm em 15 dias
+                <div className="text-3xl font-bold mb-2 text-instituto-orange">
+                  {dadosSaude.circunferencia_abdominal_cm}cm
+                </div>
+                <div className="text-sm text-green-600 font-semibold">
+                  📊 Baseline estabelecido
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  Seu primeiro registro para acompanhamento
                 </div>
               </CardContent>
             </Card>
@@ -176,17 +201,27 @@ export const BeneficiosVisuais: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                       <span>Peso atual:</span>
-                      <span className="font-bold">{dadosSaude.peso_atual_kg}kg</span>
+                      <span className="font-bold text-instituto-orange">{dadosSaude.peso_atual_kg}kg</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
+                      <span>Altura:</span>
+                      <span className="font-bold">{dadosSaude.altura_cm}cm</span>
+                    </div>
+                    <div className="flex justify-between items-center">
                       <span>Meta:</span>
-                      <span className="font-bold text-primary">{dadosSaude.meta_peso_kg}kg</span>
+                      <span className="font-bold text-primary">
+                        {dadosSaude.meta_peso_kg ? `${dadosSaude.meta_peso_kg}kg` : 'Não definida'}
+                      </span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                       <span>Progresso:</span>
-                      <span className="font-bold text-green-600">{dadosSaude.progresso_percentual?.toFixed(0)}%</span>
+                      <span className="font-bold text-green-600">{dadosSaude.progresso_percentual?.toFixed(0) || '0'}%</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Circunf. abdominal:</span>
+                      <span className="font-bold text-instituto-orange">{dadosSaude.circunferencia_abdominal_cm}cm</span>
                     </div>
                   </div>
                 </CardContent>
@@ -201,10 +236,11 @@ export const BeneficiosVisuais: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2 text-sm">
-                    <p>• Continue com sua rotina de exercícios</p>
-                    <p>• Mantenha a alimentação balanceada</p>
-                    <p>• Monitore suas medidas semanalmente</p>
-                    <p>• Celebre cada pequena conquista!</p>
+                    <p>• ✅ Dados físicos registrados com sucesso</p>
+                    <p>• 📊 Gráficos personalizados gerados</p>
+                    <p>• 🎯 Continue registrando seu progresso diário</p>
+                    <p>• 📈 Acompanhe sua evolução nas missões</p>
+                    <p>• 🏆 Celebre cada pequena conquista!</p>
                   </div>
                 </CardContent>
               </Card>

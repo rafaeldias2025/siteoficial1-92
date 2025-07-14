@@ -69,6 +69,7 @@ export const DadosFisicosForm = () => {
       }
 
       toast.success('Dados salvos com sucesso! Gráficos atualizados.');
+      // Redirecionar para a página inicial onde os benefícios visuais serão exibidos
       navigate('/');
     } catch (error) {
       console.error('Erro ao salvar dados:', error);
