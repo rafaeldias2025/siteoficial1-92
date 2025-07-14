@@ -11,6 +11,7 @@ import MinhasMetas from "@/components/MinhasMetas";
 import Desafios from "@/components/Desafios";
 import DiarioSaude from "@/components/DiarioSaude";
 import MissaoDia from "@/components/MissaoDia";
+import { useGoals } from "@/hooks/useGoals";
 
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
