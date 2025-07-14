@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { Mail, Lock, User, Eye, EyeOff, CheckCircle, AlertCircle, Phone } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, CheckCircle, AlertCircle, Phone, Users, Award, ChevronRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import butterflyLogo from '@/assets/butterfly-logo.png';
 // import CadastroCompletoForm from '@/components/CadastroCompletoForm'; // Removido
@@ -21,6 +21,7 @@ const Auth = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showCadastroCompleto, setShowCadastroCompleto] = useState(false);
+  const [userType, setUserType] = useState<'visitante' | 'cliente' | null>(null);
 
   const { signIn, signUp, user } = useAuth();
   const { toast } = useToast();
@@ -107,6 +108,9 @@ const Auth = () => {
             .eq('user_id', currentUser.id)
             .single();
           
+          // Salvar tipo de usuário como cliente (se já está logando)
+          localStorage.setItem('userType', 'cliente');
+          
           if (profile?.role === 'admin') {
             toast({
               title: "✨ Bem-vindo Administrador!",
@@ -123,6 +127,8 @@ const Auth = () => {
         }
       } catch (error) {
         console.error('Erro ao verificar role:', error);
+        // Salvar tipo de usuário como cliente mesmo com erro
+        localStorage.setItem('userType', 'cliente');
         navigate('/dashboard');
       }
     }
@@ -143,6 +149,12 @@ const Auth = () => {
         console.error('Erro ao migrar dados do visitante:', error);
       }
     }
+  };
+
+  const handleVisitorAccess = () => {
+    // Para visitantes, salvar no localStorage que é visitante e redirecionar
+    localStorage.setItem('userType', 'visitante');
+    navigate('/dashboard');
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -200,6 +212,9 @@ const Auth = () => {
       // Migrar dados do visitante se existirem
       migrateVisitorData();
       
+      // Salvar tipo de usuário
+      localStorage.setItem('userType', 'cliente');
+      
       toast({
         title: "🎉 Conta criada com sucesso!",
         description: "Redirecionando para o dashboard...",
@@ -221,6 +236,188 @@ const Auth = () => {
   //   return <div>Formulário removido</div>;
   // }
 
+  // Se ainda não escolheu o tipo de usuário, mostrar seleção
+  if (!userType) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-instituto-light via-white to-instituto-cream flex items-center justify-center p-4">
+        <div className="w-full max-w-4xl space-y-6">
+          {/* Logo e Header */}
+          <div className="text-center space-y-4">
+            <div className="flex justify-center">
+              <img src={butterflyLogo} alt="Instituto dos Sonhos" className="w-16 h-16" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-instituto-dark">Instituto dos Sonhos</h1>
+              <p className="text-instituto-dark/70 mt-2">Sua jornada de transformação começa aqui</p>
+            </div>
+          </div>
+
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-semibold text-instituto-dark mb-2">Como você gostaria de começar?</h2>
+            <p className="text-instituto-dark/70">Escolha a opção que melhor se adequa ao seu perfil</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Área do Visitante */}
+            <Card 
+              className="shadow-warm cursor-pointer hover:shadow-lg transition-all duration-300 group border-2 hover:border-instituto-purple/50"
+              onClick={() => setUserType('visitante')}
+            >
+              <CardContent className="p-8">
+                <div className="mb-6">
+                  <div className="w-20 h-20 bg-instituto-purple/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Users className="h-10 w-10 text-instituto-purple" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-instituto-dark mb-4">
+                    Sou Visitante
+                  </h3>
+                  <p className="text-instituto-dark/70 mb-6">
+                    Explore conteúdos gratuitos, veja benefícios e participe do ranking público
+                  </p>
+                </div>
+                
+                <div className="space-y-3 text-left">
+                  <div className="flex items-center gap-3 text-instituto-dark/70">
+                    <ChevronRight className="h-4 w-4 text-instituto-purple" />
+                    <span>Acesso ao ranking público</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-instituto-dark/70">
+                    <ChevronRight className="h-4 w-4 text-instituto-purple" />
+                    <span>Missões diárias gratuitas</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-instituto-dark/70">
+                    <ChevronRight className="h-4 w-4 text-instituto-purple" />
+                    <span>Conteúdos de bem-estar</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-instituto-dark/70">
+                    <ChevronRight className="h-4 w-4 text-instituto-purple" />
+                    <span>Testes e avaliações básicos</span>
+                  </div>
+                </div>
+                
+                <Button className="w-full mt-6 bg-instituto-purple hover:bg-instituto-purple/90 text-white group-hover:scale-105 transition-transform">
+                  Explorar como Visitante
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Área do Cliente */}
+            <Card 
+              className="shadow-warm cursor-pointer hover:shadow-lg transition-all duration-300 group border-2 hover:border-instituto-orange/50"
+              onClick={() => setUserType('cliente')}
+            >
+              <CardContent className="p-8">
+                <div className="mb-6">
+                  <div className="w-20 h-20 bg-instituto-orange/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Award className="h-10 w-10 text-instituto-orange" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-instituto-dark mb-4">
+                    Sou Cliente
+                  </h3>
+                  <p className="text-instituto-dark/70 mb-6">
+                    Acesso completo a todos os cursos, acompanhamento personalizado e ferramentas avançadas
+                  </p>
+                </div>
+                
+                <div className="space-y-3 text-left">
+                  <div className="flex items-center gap-3 text-instituto-dark/70">
+                    <ChevronRight className="h-4 w-4 text-instituto-orange" />
+                    <span>Biblioteca completa de cursos</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-instituto-dark/70">
+                    <ChevronRight className="h-4 w-4 text-instituto-orange" />
+                    <span>Acompanhamento personalizado</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-instituto-dark/70">
+                    <ChevronRight className="h-4 w-4 text-instituto-orange" />
+                    <span>Diário de saúde privado</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-instituto-dark/70">
+                    <ChevronRight className="h-4 w-4 text-instituto-orange" />
+                    <span>Metas e progresso avançado</span>
+                  </div>
+                </div>
+                
+                <Button className="w-full mt-6 bg-instituto-orange hover:bg-instituto-orange-hover text-white group-hover:scale-105 transition-transform">
+                  Acessar Área do Cliente
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center text-sm text-instituto-dark/70 mt-8">
+            Você pode alterar sua escolha a qualquer momento no dashboard
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Se escolheu visitante, mostrar opção de continuar sem cadastro
+  if (userType === 'visitante') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-instituto-light via-white to-instituto-cream flex items-center justify-center p-4">
+        <div className="w-full max-w-md space-y-6">
+          {/* Logo e Header */}
+          <div className="text-center space-y-4">
+            <div className="flex justify-center">
+              <img src={butterflyLogo} alt="Instituto dos Sonhos" className="w-16 h-16" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-instituto-dark">Bem-vindo, Visitante!</h1>
+              <p className="text-instituto-dark/70 mt-2">Como gostaria de continuar?</p>
+            </div>
+          </div>
+
+          <Card className="shadow-warm">
+            <CardContent className="p-6 space-y-4">
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 bg-instituto-purple/20 rounded-full flex items-center justify-center mx-auto">
+                  <Users className="h-8 w-8 text-instituto-purple" />
+                </div>
+                <p className="text-instituto-dark/70">
+                  Como visitante, você pode explorar nosso conteúdo gratuito sem precisar se cadastrar.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <Button 
+                  onClick={handleVisitorAccess}
+                  className="w-full bg-instituto-purple hover:bg-instituto-purple/90 text-white"
+                  size="lg"
+                >
+                  Continuar como Visitante
+                </Button>
+                
+                <div className="text-center">
+                  <span className="text-instituto-dark/50 text-sm">ou</span>
+                </div>
+                
+                <Button 
+                  onClick={() => setUserType('cliente')}
+                  variant="outline"
+                  className="w-full border-instituto-orange text-instituto-orange hover:bg-instituto-orange hover:text-white"
+                  size="lg"
+                >
+                  Criar Conta para Mais Benefícios
+                </Button>
+              </div>
+
+              <div className="text-center pt-4">
+                <button 
+                  onClick={() => setUserType(null)}
+                  className="text-instituto-dark/50 text-sm hover:text-instituto-dark transition-colors"
+                >
+                  ← Voltar à seleção
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-instituto-light via-white to-instituto-cream flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6">
@@ -231,7 +428,7 @@ const Auth = () => {
           </div>
           <div>
             <h1 className="text-3xl font-bold text-instituto-dark">Instituto dos Sonhos</h1>
-            <p className="text-instituto-dark/70 mt-2">Sua jornada de transformação começa aqui</p>
+            <p className="text-instituto-dark/70 mt-2">Área do Cliente - Faça login ou crie sua conta</p>
           </div>
         </div>
 
@@ -451,8 +648,19 @@ const Auth = () => {
           </CardContent>
         </Card>
 
-        <div className="text-center text-sm text-instituto-dark/70">
-          Ao continuar, você concorda com nossos Termos de Uso
+        <div className="space-y-3">
+          <div className="text-center text-sm text-instituto-dark/70">
+            Ao continuar, você concorda com nossos Termos de Uso
+          </div>
+          
+          <div className="text-center">
+            <button 
+              onClick={() => setUserType(null)}
+              className="text-instituto-dark/50 text-sm hover:text-instituto-dark transition-colors"
+            >
+              ← Voltar à seleção de perfil
+            </button>
+          </div>
         </div>
       </div>
     </div>
