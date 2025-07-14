@@ -711,32 +711,41 @@ export type Database = {
       }
       profiles: {
         Row: {
+          altura_cm: number | null
           celular: string | null
           created_at: string | null
+          data_nascimento: string | null
           email: string
           full_name: string | null
           id: string
           role: Database["public"]["Enums"]["user_role"]
+          sexo: string | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
+          altura_cm?: number | null
           celular?: string | null
           created_at?: string | null
+          data_nascimento?: string | null
           email: string
           full_name?: string | null
           id?: string
           role?: Database["public"]["Enums"]["user_role"]
+          sexo?: string | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
+          altura_cm?: number | null
           celular?: string | null
           created_at?: string | null
+          data_nascimento?: string | null
           email?: string
           full_name?: string | null
           id?: string
           role?: Database["public"]["Enums"]["user_role"]
+          sexo?: string | null
           updated_at?: string | null
           user_id?: string
         }

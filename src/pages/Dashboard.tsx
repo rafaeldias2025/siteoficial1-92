@@ -14,6 +14,7 @@ import MissaoDia from "@/components/MissaoDia";
 import { BeneficiosVisuais } from "@/components/BeneficiosVisuais";
 import { ProgressCharts } from "@/components/ProgressCharts";
 import { useGoals } from "@/hooks/useGoals";
+import { UserProfileHeader } from "@/components/UserProfileHeader";
 
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -150,7 +151,9 @@ const Dashboard = () => {
           </div>
 
           {/* Content */}
-          <div className="p-6">
+          <div className="p-6 space-y-6">
+            {/* Header com dados do usuário */}
+            <UserProfileHeader />
             {renderContent()}
           </div>
         </div>

@@ -173,7 +173,7 @@ export const BeneficiosVisuais: React.FC = () => {
                 <AtualizarMedidasModal 
                   trigger={
                     <Button className="bg-instituto-orange hover:bg-instituto-orange/90">
-                      Registrar Medidas
+                      ⚖️ Registrar Medidas
                     </Button>
                   }
                 />

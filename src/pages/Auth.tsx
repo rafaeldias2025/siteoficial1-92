@@ -4,9 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { Mail, Lock, User, Eye, EyeOff, CheckCircle, AlertCircle, Phone, Users, Award, ChevronRight } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, CheckCircle, AlertCircle, Phone, Users, Award, ChevronRight, Calendar, UserCheck, Ruler } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import butterflyLogo from '@/assets/butterfly-logo.png';
 // import CadastroCompletoForm from '@/components/CadastroCompletoForm'; // Removido
@@ -16,6 +17,9 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [celular, setCelular] = useState('');
+  const [dataNascimento, setDataNascimento] = useState('');
+  const [sexo, setSexo] = useState('');
+  const [altura, setAltura] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
@@ -196,13 +200,40 @@ const Auth = () => {
       setLoading(false);
       return;
     }
+    if (!dataNascimento.trim()) {
+      toast({
+        title: "❌ Data de nascimento obrigatória",
+        description: "Por favor, informe sua data de nascimento.",
+        variant: "destructive"
+      });
+      setLoading(false);
+      return;
+    }
+    if (!sexo.trim()) {
+      toast({
+        title: "❌ Sexo obrigatório",
+        description: "Por favor, selecione seu sexo.",
+        variant: "destructive"
+      });
+      setLoading(false);
+      return;
+    }
+    if (!altura.trim() || isNaN(Number(altura)) || Number(altura) < 100 || Number(altura) > 250) {
+      toast({
+        title: "❌ Altura inválida",
+        description: "Por favor, informe uma altura válida entre 100 e 250 cm.",
+        variant: "destructive"
+      });
+      setLoading(false);
+      return;
+    }
     if (!validateEmail(email) || !validatePassword(password)) {
       setLoading(false);
       return;
     }
     const {
       error
-    } = await signUp(email, password, fullName, celular);
+    } = await signUp(email, password, fullName, celular, dataNascimento, sexo, Number(altura));
     if (error) {
       let errorMessage = "Erro ao criar conta. Tente novamente.";
       if (error.message.includes('already registered') || error.message.includes('User already registered')) {
@@ -487,6 +518,45 @@ const Auth = () => {
                     <div className="relative">
                       <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input type="tel" placeholder="Celular com DDD (11) 99999-9999" value={celular} onChange={e => setCelular(e.target.value)} className="pl-10" required />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input type="date" placeholder="Data de nascimento" value={dataNascimento} onChange={e => setDataNascimento(e.target.value)} className="pl-10" required />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="relative">
+                      <UserCheck className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Select value={sexo} onValueChange={setSexo}>
+                        <SelectTrigger className="pl-10">
+                          <SelectValue placeholder="Selecione seu sexo" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="masculino">Masculino</SelectItem>
+                          <SelectItem value="feminino">Feminino</SelectItem>
+                          <SelectItem value="outro">Outro</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="relative">
+                      <Ruler className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input 
+                        type="number" 
+                        placeholder="Altura em centímetros (ex: 170)" 
+                        value={altura} 
+                        onChange={e => setAltura(e.target.value)} 
+                        className="pl-10" 
+                        min="100" 
+                        max="250" 
+                        required 
+                      />
                     </div>
                   </div>
 

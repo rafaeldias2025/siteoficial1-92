@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Scale, Ruler } from 'lucide-react';
 import { useDadosSaude, DadosSaude } from '@/hooks/useDadosSaude';
 import { BluetoothScaleConnection } from './BluetoothScaleConnection';
+import { useToast } from '@/hooks/use-toast';
 
 interface AtualizarMedidasModalProps {
   trigger?: React.ReactNode;
@@ -15,6 +16,7 @@ interface AtualizarMedidasModalProps {
 
 export const AtualizarMedidasModal: React.FC<AtualizarMedidasModalProps> = ({ trigger }) => {
   const { dadosSaude, salvarDadosSaude } = useDadosSaude();
+  const { toast } = useToast();
   
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -39,6 +41,10 @@ export const AtualizarMedidasModal: React.FC<AtualizarMedidasModalProps> = ({ tr
         ...prev,
         peso_atual_kg: scaleData.weight.toString()
       }));
+      toast({
+        title: "⚖️ Peso capturado!",
+        description: `Peso de ${scaleData.weight}kg foi preenchido automaticamente. Agora adicione a circunferência abdominal.`,
+      });
     }
     if (scaleData.waistCircumference) {
       setFormData(prev => ({
@@ -60,6 +66,10 @@ export const AtualizarMedidasModal: React.FC<AtualizarMedidasModalProps> = ({ tr
     };
 
     await salvarDadosSaude(dados);
+    toast({
+      title: "✅ Medidas atualizadas!",
+      description: "Seus dados foram salvos com sucesso. Os gráficos serão atualizados automaticamente.",
+    });
     setOpen(false);
     
     // Reload para atualizar gráficos
