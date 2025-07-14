@@ -163,6 +163,43 @@ export const useDadosSaude = () => {
     }
   }, [user]);
 
+  // Listener em tempo real para atualizações
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase
+      .channel('dados-saude-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'dados_saude_usuario'
+        },
+        () => {
+          console.log('Dados de saúde atualizados - recarregando...');
+          fetchDadosSaude();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'pesagens'
+        },
+        () => {
+          console.log('Pesagem atualizada - recarregando...');
+          fetchDadosSaude();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
+
   return {
     dadosSaude,
     missoesDaSemana,

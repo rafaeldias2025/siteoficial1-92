@@ -57,6 +57,30 @@ export const ProgressCharts = () => {
           refetch(); // Atualiza os dados quando houver mudanças
         }
       )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'pesagens'
+        },
+        (payload) => {
+          console.log('Pesagem atualizada:', payload);
+          refetch(); // Atualiza os dados quando houver mudanças nas pesagens
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'dados_fisicos_usuario'
+        },
+        (payload) => {
+          console.log('Dados físicos atualizados:', payload);
+          refetch(); // Atualiza os dados quando houver mudanças nos dados físicos
+        }
+      )
       .subscribe();
 
     return () => {
