@@ -1,9 +1,10 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { User, Mail, Phone, Calendar, UserCheck, Ruler } from 'lucide-react';
+import { User, Mail, Phone, Calendar, UserCheck, Ruler, Edit3 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
+import { EditProfileModal } from './EditProfileModal';
 
 export const UserProfileHeader = () => {
   const { user } = useAuth();
@@ -31,6 +32,26 @@ export const UserProfileHeader = () => {
 
     fetchProfile();
   }, [user]);
+
+  const handleProfileUpdate = () => {
+    // Recarregar os dados do perfil após atualização
+    if (user) {
+      const fetchUpdatedProfile = async () => {
+        try {
+          const { data } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('user_id', user.id)
+            .single();
+          
+          setProfile(data);
+        } catch (error) {
+          console.error('Erro ao recarregar perfil:', error);
+        }
+      };
+      fetchUpdatedProfile();
+    }
+  };
 
   if (loading) {
     return (
@@ -82,10 +103,21 @@ export const UserProfileHeader = () => {
           <div className="p-2 bg-instituto-orange/20 rounded-full">
             <User className="h-6 w-6 text-instituto-orange" />
           </div>
-          <div>
+          <div className="flex-1">
             <h2 className="text-xl font-bold text-instituto-dark">Dados Pessoais</h2>
-            <p className="text-sm text-muted-foreground">Informações do seu perfil (somente leitura)</p>
+            <p className="text-sm text-muted-foreground">Suas informações pessoais</p>
           </div>
+          <EditProfileModal 
+            userData={{
+              full_name: profile.full_name,
+              email: profile.email,
+              celular: profile.celular,
+              data_nascimento: profile.data_nascimento,
+              sexo: profile.sexo,
+              altura_cm: profile.altura_cm
+            }}
+            onDataUpdated={handleProfileUpdate}
+          />
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
