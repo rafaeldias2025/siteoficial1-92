@@ -44,7 +44,6 @@ const Dashboard = () => {
   const [rankingTimeFilter, setRankingTimeFilter] = useState<'week' | 'month' | 'all'>('week');
 
   const menuItems = [
-    { id: 'dados-fisicos', label: 'Dados Físicos', icon: Settings },
     { id: 'inicio', label: 'Início', icon: Home },
     { id: 'ranking', label: 'Ranking', icon: Trophy },
     { id: 'avaliacao-semanal', label: 'Avaliação Semanal', icon: Calendar },
@@ -56,8 +55,6 @@ const Dashboard = () => {
 
   const renderContent = () => {
     switch (activeSection) {
-      case 'dados-fisicos':
-        return <DadosFisicosForm />;
       case 'inicio':
         return <MissaoDia isVisitor={false} />;
       case 'ranking':
@@ -90,7 +87,7 @@ const Dashboard = () => {
           </div>
         );
       default:
-        return <DadosFisicosForm />;
+        return <MissaoDia isVisitor={false} />;
     }
   };
 
